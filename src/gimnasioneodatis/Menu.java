@@ -64,7 +64,7 @@ public class Menu {
                     Altas.Actividades();
                     break;
                 case 3:
-
+                    Altas.Socios();
                     break;
                 case 4:
 

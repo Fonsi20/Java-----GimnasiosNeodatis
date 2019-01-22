@@ -4,6 +4,7 @@ import Objetos.Actividad;
 import Objetos.Gimnasio;
 import static gimnasioneodatis.EntradaTeclado.read;
 import java.io.IOException;
+import java.util.Set;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
 import org.neodatis.odb.Objects;
@@ -60,12 +61,13 @@ public class Altas {
         ODB odb = ODBFactory.openClient("localhost", 8000, "Gimnasio");
 
         Actividad A = null;
+        Gimnasio G = null;
 
         String Tipo = null, NombreActividad;
         float Descuento, Cuota;
         boolean opc = false;
 
-        IQuery query;
+        IQuery query2, query;
 
         do {
 
@@ -102,14 +104,37 @@ public class Altas {
                 opc = true;
                 A = new Actividad(Tipo, Cuota, Descuento, NombreActividad);
 
+                System.out.println();
+                Visualizar.VerGimnasios();
+                System.out.print("A que gimnasio desea asignar esta actividad:\n > ");
+                String CIF = read.readLine();
+
+                query2 = new CriteriaQuery(Gimnasio.class, Where.equal("CIF", CIF));
+                Objects<Gimnasio> objects2 = odb.getObjects(query2);
+
+                if (objects2.isEmpty()) {
+
+                    opc = false;
+                    System.err.println("\n\t'ERROR': Ya existe esa actividad en ese gimnasio.\n\tVuelva a intentarlo:");
+
+                } else {
+
+                    opc = true;
+                    G = (Gimnasio) odb.getObjects(query2).getFirst();
+                    G.getActividad().add(A);
+                    odb.store(G);
+                }
             } else {
                 opc = false;
                 System.err.println("\n\t'ERROR': Ya existe esa actividad en la BBDD.\n\tVuelva a intentarlo:");
             }
         } while (opc != true);
 
-        odb.store(A);
         odb.close();
+    }
+
+    public static void Socios() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
