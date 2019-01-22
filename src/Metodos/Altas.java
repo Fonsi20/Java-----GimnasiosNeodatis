@@ -57,7 +57,7 @@ public class Altas {
 
     }
 
-    public static void Actividades() throws IOException {
+    public static void Actividades() throws IOException, InterruptedException {
         ODB odb = ODBFactory.openClient("localhost", 8000, "Gimnasio");
 
         Actividad A = null;
@@ -69,68 +69,79 @@ public class Altas {
 
         IQuery query2, query;
 
-        do {
+        query = new CriteriaQuery(Gimnasio.class);
+        Objects<Gimnasio> objects3 = odb.getObjects(query);
 
-            System.out.print("Selecciona un tipo de ACTIVIDAD:\n"
-                    + " 1 - Libre Horario\n"
-                    + " 2 - Actividad Grupal\n"
-                    + " 3 - Alquiler de Espacio\n");
+        if (objects3.isEmpty()) {
 
-            int result = Metodos.Validaciones.validaMenu(1, 3);
+            System.err.println("\n\t'ERROR': No hay Gimnasios dados de alta.\n\tInserte un Gimnasio y vuelva a intentarlo:");
+            Thread.sleep(100);
 
-            if (result == 1) {
-                Tipo = "Libre Horario";
-            }
-            if (result == 2) {
-                Tipo = "Actividad Grupal";
-            }
-            if (result == 3) {
-                Tipo = "Alquiler de Espacio";
-            }
+        } else {
+            do {
 
-            System.out.print("Nombre de la Actividad:\n > ");
-            NombreActividad = read.readLine();
+                System.out.print("Selecciona un tipo de ACTIVIDAD:\n"
+                        + " 1 - Libre Horario\n"
+                        + " 2 - Actividad Grupal\n"
+                        + " 3 - Alquiler de Espacio\n");
 
-            System.out.print("Cuota de la Actividad:\n > ");
-            Cuota = Float.parseFloat(read.readLine());
+                int result = Metodos.Validaciones.validaMenu(1, 3);
 
-            System.out.print("Descuento de la Actividad:\n > ");
-            Descuento = Float.parseFloat(read.readLine());
-
-            query = new CriteriaQuery(Actividad.class, Where.equal("NombreActividad", NombreActividad));
-            Objects<Actividad> objects = odb.getObjects(query);
-
-            if (objects.isEmpty()) {
-                opc = true;
-                A = new Actividad(Tipo, Cuota, Descuento, NombreActividad);
-
-                System.out.println();
-                Visualizar.VerGimnasios();
-                System.out.print("A que gimnasio desea asignar esta actividad:\n > ");
-                String CIF = read.readLine();
-
-                query2 = new CriteriaQuery(Gimnasio.class, Where.equal("CIF", CIF));
-                Objects<Gimnasio> objects2 = odb.getObjects(query2);
-
-                if (objects2.isEmpty()) {
-
-                    opc = false;
-                    System.err.println("\n\t'ERROR': Ya existe esa actividad en ese gimnasio.\n\tVuelva a intentarlo:");
-
-                } else {
-
-                    opc = true;
-                    G = (Gimnasio) odb.getObjects(query2).getFirst();
-                    G.getActividad().add(A);
-                    odb.store(G);
+                if (result == 1) {
+                    Tipo = "Libre Horario";
                 }
-            } else {
-                opc = false;
-                System.err.println("\n\t'ERROR': Ya existe esa actividad en la BBDD.\n\tVuelva a intentarlo:");
-            }
-        } while (opc != true);
+                if (result == 2) {
+                    Tipo = "Actividad Grupal";
+                }
+                if (result == 3) {
+                    Tipo = "Alquiler de Espacio";
+                }
 
-        odb.close();
+                System.out.print("Nombre de la Actividad:\n > ");
+                NombreActividad = read.readLine();
+
+                System.out.print("Cuota de la Actividad:\n > ");
+                Cuota = Float.parseFloat(read.readLine());
+
+                System.out.print("Descuento de la Actividad:\n > ");
+                Descuento = Float.parseFloat(read.readLine());
+
+                query = new CriteriaQuery(Actividad.class, Where.equal("NombreActividad", NombreActividad));
+                Objects<Actividad> objects = odb.getObjects(query);
+
+                if (objects.isEmpty()) {
+                    opc = true;
+                    A = new Actividad(Tipo, Cuota, Descuento, NombreActividad);
+
+                    System.out.println();
+                    Visualizar.VerGimnasios();
+                    System.out.print("A que gimnasio desea asignar esta actividad:\n > ");
+                    String CIF = read.readLine();
+
+                    query2 = new CriteriaQuery(Gimnasio.class, Where.equal("CIF", CIF));
+                    Objects<Gimnasio> objects2 = odb.getObjects(query2);
+
+                    if (objects2.isEmpty()) {
+
+                        opc = false;
+                        System.err.println("\n\t'ERROR':No existe ese gimnasio.\n\tVuelva a intentarlo:\n");
+                        Thread.sleep(100);
+
+                    } else {
+
+                        opc = true;
+                        G = (Gimnasio) odb.getObjects(query2).getFirst();
+                        G.getActividad().add(A);
+                        odb.store(G);
+                    }
+                } else {
+                    opc = false;
+                    System.err.println("\n\t'ERROR': Ya existe esa actividad en la BBDD.\n\tVuelva a intentarlo:");
+                }
+            } while (opc != true);
+
+            odb.close();
+        }
     }
 
     public static void Socios() {
