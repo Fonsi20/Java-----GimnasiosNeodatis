@@ -2,7 +2,9 @@ package gimnasioneodatis;
 
 import Metodos.Altas;
 import Metodos.Validaciones;
+import Metodos.Visualizar;
 import java.io.IOException;
+import java.text.ParseException;
 import org.neodatis.odb.ODBServer;
 
 /**
@@ -11,7 +13,7 @@ import org.neodatis.odb.ODBServer;
  */
 public class Menu {
 
-    static void mainMenu(ODBServer server) throws IOException {
+    static void mainMenu(ODBServer server) throws IOException, InterruptedException, ParseException {
 
         int op = 0;
         do {
@@ -44,7 +46,7 @@ public class Menu {
         } while (op != 4);
     }
 
-    private static void altasMenu() throws IOException {
+    private static void altasMenu() throws IOException, InterruptedException, ParseException {
         int op = 0;
         do {
             System.out.println("\n\nMenú de Altas:\n"
@@ -67,7 +69,7 @@ public class Menu {
                     Altas.Socios();
                     break;
                 case 4:
-
+                    Altas.Uso();
                     break;
                 case 5:
                     System.out.println(" > Volvemos al menú principal");
@@ -80,7 +82,35 @@ public class Menu {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private static void consultasMenu() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void consultasMenu() throws IOException {
+        int op = 0;
+        do {
+            System.out.println("\n\nMenú de VER:\n"
+                    + "--------------------------------------------------------------------------------------------\n"
+                    + "Seleccione una opción:\n"
+                    + " 1 -\t Ver Gimnasios\n"
+                    + " 2 -\t Ver Actividades\n"
+                    + " 3 -\t Ver Socios\n\n"
+                    + " 4 -\t Ver Usos\n\n"
+                    + " 5 -\t Salir\n");
+            op = Validaciones.validaMenu(1, 5);
+            switch (op) {
+                case 1:
+                    Visualizar.VerGimnasios();
+                    break;
+                case 2:
+                    Visualizar.VerActividades();
+                    break;
+                case 3:
+                    Visualizar.VerSocios();
+                    break;
+                case 4:
+                    Visualizar.VerUsos();
+                    break;
+                case 5:
+                    System.out.println(" > Volvemos al menú principal");
+                    break;
+            }
+        } while (op != 5);
     }
 }
