@@ -1,6 +1,8 @@
 package gimnasioneodatis;
 
 import Metodos.Altas;
+import Metodos.Bajas;
+import Metodos.Consultas;
 import Metodos.Validaciones;
 import Metodos.Visualizar;
 import java.io.IOException;
@@ -78,8 +80,32 @@ public class Menu {
         } while (op != 5);
     }
 
-    private static void bajasMenu() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void bajasMenu() throws IOException {
+        int op = 0;
+        do {
+            System.out.println("\n\nMenú de Bajas:\n"
+                    + "--------------------------------------------------------------------------------------------\n"
+                    + "Seleccione una opción:\n"
+                    + " 1 -\t Gimnasios\n"
+                    + " 2 -\t Actividades\n"
+                    + " 3 -\t Socios\n\n"
+                    + " 4 -\t Salir\n");
+            op = Validaciones.validaMenu(1, 4);
+            switch (op) {
+                case 1:
+                    Bajas.Gimnasios();
+                    break;
+                case 2:
+                    Bajas.Actividades();
+                    break;
+                case 3:
+                    Bajas.Socios();
+                    break;
+                case 4:
+                    System.out.println(" > Volvemos al menú principal");
+                    break;
+            }
+        } while (op != 4);
     }
 
     private static void consultasMenu() throws IOException {
@@ -90,10 +116,12 @@ public class Menu {
                     + "Seleccione una opción:\n"
                     + " 1 -\t Ver Gimnasios\n"
                     + " 2 -\t Ver Actividades\n"
-                    + " 3 -\t Ver Socios\n\n"
+                    + " 3 -\t Ver Socios\n"
                     + " 4 -\t Ver Usos\n\n"
-                    + " 5 -\t Salir\n");
-            op = Validaciones.validaMenu(1, 5);
+                    + " 5 -\t Gimnasios con mas socios y sus actividades\n"
+                    + " 6 -\t Actividades de un cliente entre dos fechas\n\n"
+                    + " 7 -\t Salir\n");
+            op = Validaciones.validaMenu(1, 7);
             switch (op) {
                 case 1:
                     Visualizar.VerGimnasios();
@@ -108,9 +136,15 @@ public class Menu {
                     Visualizar.VerUsos();
                     break;
                 case 5:
+                    Consultas.MAXGimCliente();
+                    break;
+                case 6:
+                    Consultas.GastoClienteFechas();
+                    break;
+                case 7:
                     System.out.println(" > Volvemos al menú principal");
                     break;
             }
-        } while (op != 5);
+        } while (op != 7);
     }
 }

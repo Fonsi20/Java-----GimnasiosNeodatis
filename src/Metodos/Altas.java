@@ -1,7 +1,6 @@
 package Metodos;
 
 import Objetos.Actividad;
-import Objetos.Cliente;
 import Objetos.Gimnasio;
 import Objetos.Socio;
 import Objetos.Uso;
