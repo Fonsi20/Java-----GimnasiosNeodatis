@@ -2,8 +2,6 @@ package Metodos;
 
 import static gimnasioneodatis.EntradaTeclado.read;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
